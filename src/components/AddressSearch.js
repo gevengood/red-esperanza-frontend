@@ -1,6 +1,44 @@
+/**
+ * @file AddressSearch.js
+ * @description Componente de búsqueda de direcciones con geocodificación.
+ * Utiliza la API de Nominatim (OpenStreetMap) para búsqueda y geocodificación inversa.
+ * 
+ * Funcionalidades:
+ * - Búsqueda de direcciones con autocompletado
+ * - Geolocalización GPS del navegador
+ * - Geocodificación inversa (coordenadas → dirección)
+ * - Botones rápidos para ciudades principales de Colombia
+ * - Debounce para optimizar peticiones
+ * - Cierre automático de sugerencias al hacer click fuera
+ * 
+ * @component
+ * @requires react
+ * @requires ./AddressSearch.css
+ * @author Jorge Steven Doncel Bejarano
+ * @date 2025-11-09
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import './AddressSearch.css';
 
+/**
+ * Componente de búsqueda de direcciones con geocodificación.
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {Function} props.onSelectAddress - Callback al seleccionar una dirección
+ *   Recibe (lat, lng, address) donde address es el texto de la dirección
+ * @param {string} [props.initialAddress=''] - Dirección inicial para el input
+ * @returns {React.ReactElement} Componente de búsqueda de direcciones
+ * 
+ * @example
+ * <AddressSearch 
+ *   onSelectAddress={(lat, lng, address) => {
+ *     console.log('Ubicación:', lat, lng);
+ *     console.log('Dirección:', address);
+ *   }}
+ *   initialAddress="Bogotá, Colombia"
+ * />
+ */
 const AddressSearch = ({ onSelectAddress, initialAddress = '' }) => {
   const [query, setQuery] = useState(initialAddress);
   const [suggestions, setSuggestions] = useState([]);
@@ -10,7 +48,10 @@ const AddressSearch = ({ onSelectAddress, initialAddress = '' }) => {
   const debounceTimer = useRef(null);
   const wrapperRef = useRef(null);
 
-  // Cerrar sugerencias al hacer click fuera
+  /**
+   * Effect para cerrar las sugerencias cuando se hace click fuera del componente.
+   * Maneja el evento de mousedown globalmente.
+   */
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -22,6 +63,14 @@ const AddressSearch = ({ onSelectAddress, initialAddress = '' }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  /**
+   * Busca direcciones usando la API de Nominatim (OpenStreetMap).
+   * Filtra resultados solo para Colombia (countrycodes=co).
+   * 
+   * @async
+   * @param {string} searchQuery - Texto de búsqueda (mínimo 3 caracteres)
+   * @returns {Promise<void>}
+   */
   const searchAddress = async (searchQuery) => {
     if (!searchQuery || searchQuery.length < 3) {
       setSuggestions([]);
@@ -74,7 +123,13 @@ const AddressSearch = ({ onSelectAddress, initialAddress = '' }) => {
     }
   };
 
-  // Función para obtener ubicación GPS actual
+  /**
+   * Obtiene la ubicación actual del usuario usando la API de Geolocalización del navegador.
+   * Solicita permisos al usuario para acceder a su ubicación GPS.
+   * Una vez obtenidas las coordenadas, usa geocodificación inversa para obtener la dirección.
+   * 
+   * @returns {void}
+   */
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
       alert('Tu navegador no soporta geolocalización');

@@ -1,13 +1,59 @@
+/**
+ * @file ImageUploader.js
+ * @description Componente para subir imágenes a Supabase Storage.
+ * Incluye validación, preview, barra de progreso y drag & drop.
+ * 
+ * Funcionalidades:
+ * - Subida de imágenes a Supabase Storage (bucket: case-images)
+ * - Validación de tipo (JPG, PNG, WebP) y tamaño (máx 5MB por defecto)
+ * - Preview local antes y después de subir
+ * - Barra de progreso durante la subida
+ * - Drag & drop de archivos
+ * - Generación automática de nombres únicos
+ * 
+ * @component
+ * @requires react
+ * @requires ../config/supabase
+ * @requires ./ImageUploader.css
+ * @author Jorge Steven Doncel Bejarano
+ * @date 2025-11-09
+ */
+
 import React, { useState } from 'react';
 import { supabase } from '../config/supabase';
 import './ImageUploader.css';
 
+/**
+ * Componente de subida de imágenes a Supabase Storage.
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {Function} props.onImageUploaded - Callback cuando la imagen se sube exitosamente
+ *   Recibe la URL pública de la imagen como parámetro
+ * @param {string|null} [props.existingImageUrl=null] - URL de imagen existente (para modo edición)
+ * @param {number} [props.maxSizeMB=5] - Tamaño máximo permitido en MB
+ * @returns {React.ReactElement} Componente de subida de imágenes
+ * 
+ * @example
+ * <ImageUploader 
+ *   onImageUploaded={(url) => {
+ *     console.log('Imagen subida:', url);
+ *     setFormData(prev => ({ ...prev, url_foto_1: url }));
+ *   }}
+ *   maxSizeMB={5}
+ * />
+ */
 const ImageUploader = ({ onImageUploaded, existingImageUrl = null, maxSizeMB = 5 }) => {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(existingImageUrl);
   const [error, setError] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
 
+  /**
+   * Valida el tipo y tamaño de un archivo de imagen.
+   * 
+   * @param {File} file - Archivo a validar
+   * @returns {string|null} Mensaje de error o null si es válido
+   */
   const validateImage = (file) => {
     // Validar tipo de archivo
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -24,6 +70,20 @@ const ImageUploader = ({ onImageUploaded, existingImageUrl = null, maxSizeMB = 5
     return null;
   };
 
+  /**
+   * Sube una imagen a Supabase Storage y retorna la URL pública.
+   * 
+   * Proceso:
+   * 1. Valida el archivo (tipo y tamaño)
+   * 2. Genera un nombre único con timestamp y random
+   * 3. Sube a Supabase Storage (bucket: case-images, carpeta: cases/)
+   * 4. Obtiene la URL pública
+   * 5. Llama al callback onImageUploaded con la URL
+   * 
+   * @async
+   * @param {File} file - Archivo de imagen a subir
+   * @returns {Promise<void>}
+   */
   const uploadImage = async (file) => {
     setUploading(true);
     setError('');

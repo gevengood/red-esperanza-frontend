@@ -1,23 +1,54 @@
+/**
+ * @file LoginPage.js
+ * @description Página de autenticación que maneja el inicio de sesión y registro de usuarios.
+ * Proporciona formularios para login y registro con validación, manejo de errores y estados de carga.
+ * @author Jorge Steven Doncel Bejarano
+ * @date 2025-11-09
+ */
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { authenticateUser, registerUser } from '../services/caseService';
 import './LoginPage.css';
 
+/**
+ * Componente de página de login y registro
+ * @component
+ * @description Renderiza una página con formularios alternantes para iniciar sesión o registrarse.
+ * Incluye validación de campos, manejo de errores y redirección post-autenticación.
+ * 
+ * @example
+ * // Uso en el router
+ * <Route path="/login" element={<LoginPage />} />
+ * 
+ * @returns {JSX.Element} Página completa de login/registro con formularios y validación
+ */
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   
+  // Estado para alternar entre formularios de login y registro
   const [isRegistering, setIsRegistering] = useState(false);
+  
+  // Estado del formulario con todos los campos necesarios
   const [formData, setFormData] = useState({
     correo: '',
     password: '',
     nombre: '',
     telefono: ''
   });
+  
+  // Estados para manejo de errores y carga
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Maneja los cambios en los inputs del formulario
+   * @function handleInputChange
+   * @description Actualiza el estado del formulario y limpia errores al escribir
+   * @param {Event} e - Evento del input
+   */
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -26,14 +57,29 @@ const LoginPage = () => {
     setError('');
   };
 
+  /**
+   * Maneja el proceso de inicio de sesión
+   * @function handleLogin
+   * @description Autentica al usuario con correo y contraseña, actualiza el contexto y redirige al home
+   * @param {Event} e - Evento del formulario
+   * @async
+   * @throws {Error} Si las credenciales son inválidas o hay error de conexión
+   * 
+   * @example
+   * // Se llama automáticamente al enviar el formulario de login
+   * <form onSubmit={handleLogin}>...</form>
+   */
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
+      // Autentica con el backend
       const userData = await authenticateUser(formData.correo, formData.password);
+      // Actualiza el contexto global de autenticación
       login(userData);
+      // Redirige al home
       navigate('/');
     } catch (err) {
       setError(err.message || 'Error al iniciar sesión');
@@ -42,19 +88,34 @@ const LoginPage = () => {
     }
   };
 
+  /**
+   * Maneja el proceso de registro de nuevo usuario
+   * @function handleRegister
+   * @description Registra un nuevo usuario, lo autentica automáticamente y redirige al home
+   * @param {Event} e - Evento del formulario
+   * @async
+   * @throws {Error} Si el correo ya existe, datos inválidos o error de conexión
+   * 
+   * @example
+   * // Se llama automáticamente al enviar el formulario de registro
+   * <form onSubmit={handleRegister}>...</form>
+   */
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
+      // Registra el nuevo usuario en el backend
       const response = await registerUser({
         nombre: formData.nombre,
         correo: formData.correo,
         password: formData.password,
         telefono: formData.telefono
       });
+      // Login automático después del registro
       login(response.usuario);
+      // Redirige al home
       navigate('/');
     } catch (err) {
       setError(err.message || 'Error al registrar usuario');
@@ -63,6 +124,7 @@ const LoginPage = () => {
     }
   };
 
+  // Renderiza la página con formularios alternantes
   return (
     <div className="login-page">
       <div className="login-container">

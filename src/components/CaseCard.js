@@ -1,8 +1,50 @@
+/**
+ * @file CaseCard.js
+ * @description Tarjeta de caso con información resumida del desaparecido.
+ * Componente reutilizable para mostrar casos en listas, grids y perfiles.
+ * @author Jorge Steven Doncel Bejarano
+ * @date 2025-11-09
+ */
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './CaseCard.css';
 
+/**
+ * Componente de tarjeta de caso
+ * @component
+ * @description Renderiza una tarjeta con foto, nombre, edad, sexo, ubicación y fecha del caso.
+ * Incluye badge de estado opcional y link al detalle completo.
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {Object} props.caso - Objeto del caso a mostrar
+ * @param {number} props.caso.id_caso - ID único del caso
+ * @param {string} props.caso.nombre_desaparecido - Nombre del desaparecido
+ * @param {number} props.caso.edad_desaparecido - Edad en años
+ * @param {string} props.caso.sexo_desaparecido - "MASCULINO" o "FEMENINO"
+ * @param {string} props.caso.direccion_texto - Dirección de desaparición
+ * @param {string} props.caso.fecha_desaparicion - Fecha ISO de desaparición
+ * @param {string} [props.caso.url_foto_1] - URL de la foto principal
+ * @param {string} [props.caso.estado_caso] - Estado del caso (ACTIVO, RESUELTO, etc.)
+ * @param {boolean} [props.showStatus=false] - Mostrar badge de estado sobre la foto
+ * 
+ * @example
+ * // Uso en HomePage
+ * <CaseCard caso={caseData} />
+ * 
+ * @example
+ * // Uso en ProfilePage con estado
+ * <CaseCard caso={caseData} showStatus={true} />
+ * 
+ * @returns {JSX.Element} Tarjeta clickeable que navega al detalle del caso
+ */
 const CaseCard = ({ caso, showStatus = false }) => {
+  /**
+   * Formatea fecha a formato legible español
+   * @function formatDate
+   * @param {string} dateString - Fecha en formato ISO
+   * @returns {string} Fecha formateada (ej: "15 de noviembre de 2024, 14:30")
+   */
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('es-MX', { 
@@ -14,7 +56,14 @@ const CaseCard = ({ caso, showStatus = false }) => {
     });
   };
 
+  /**
+   * Genera el badge de estado del caso
+   * @function getStatusBadge
+   * @param {string} estado - Estado del caso (ACTIVO, PENDIENTE_REVISION, RESUELTO, RECHAZADO)
+   * @returns {JSX.Element} Badge con estilo específico según el estado
+   */
   const getStatusBadge = (estado) => {
+    // Configuración de estilos para cada estado del caso
     const statusConfig = {
       'ACTIVO': { label: 'Activo', className: 'status-active' },
       'PENDIENTE_REVISION': { label: 'Pendiente', className: 'status-pending' },
@@ -31,10 +80,17 @@ const CaseCard = ({ caso, showStatus = false }) => {
     );
   };
 
+  /**
+   * Formatea el texto de edad con plural correcto
+   * @function getAgeText
+   * @param {number} edad - Edad en años
+   * @returns {string} Texto formateado ("1 año" o "X años")
+   */
   const getAgeText = (edad) => {
     return edad === 1 ? '1 año' : `${edad} años`;
   };
 
+  // Renderiza tarjeta clickeable con foto, info resumida y link al detalle
   return (
     <Link to={`/caso/${caso.id_caso}`} className="case-card-link">
       <div className="case-card">

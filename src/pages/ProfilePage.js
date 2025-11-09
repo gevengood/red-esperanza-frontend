@@ -1,3 +1,11 @@
+/**
+ * @file ProfilePage.js
+ * @description Página de perfil del usuario con información personal y listado de casos reportados.
+ * Muestra datos del usuario, badge de administrador si aplica, y todos los reportes enviados por el usuario.
+ * @author Jorge Steven Doncel Bejarano
+ * @date 2025-11-09
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -7,16 +15,37 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { getCasesByUserId } from '../services/caseService';
 import './ProfilePage.css';
 
+/**
+ * Componente de página de perfil
+ * @component
+ * @description Renderiza el perfil del usuario con información personal y sus casos reportados.
+ * Incluye botón de logout, badge de admin, estadísticas y grid de casos con estados.
+ * 
+ * @example
+ * // Uso en el router
+ * <Route path="/perfil" element={<ProfilePage />} />
+ * 
+ * @returns {JSX.Element} Página de perfil con información del usuario y sus reportes
+ */
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { currentUser, logout, isAdmin } = useAuth();
+  
+  // Estado de casos del usuario y carga
   const [myCases, setMyCases] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Carga los casos del usuario al montar el componente
   useEffect(() => {
     loadMyCases();
   }, []);
 
+  /**
+   * Carga todos los casos reportados por el usuario actual
+   * @function loadMyCases
+   * @description Obtiene del backend todos los casos creados por el usuario
+   * @async
+   */
   const loadMyCases = async () => {
     if (!currentUser) return;
     
@@ -31,6 +60,11 @@ const ProfilePage = () => {
     }
   };
 
+  /**
+   * Maneja el cierre de sesión del usuario
+   * @function handleLogout
+   * @description Solicita confirmación, cierra sesión y redirige al login
+   */
   const handleLogout = () => {
     if (window.confirm('¿Estás seguro de cerrar sesión?')) {
       logout();
@@ -38,10 +72,12 @@ const ProfilePage = () => {
     }
   };
 
+  // Protección: no renderiza si no hay usuario autenticado
   if (!currentUser) {
     return null;
   }
 
+  // Renderiza la página con información del perfil y casos del usuario
   return (
     <div className="profile-page">
       <Header 
