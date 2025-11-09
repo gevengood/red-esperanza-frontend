@@ -539,8 +539,7 @@ src/- 🖥️ Desktop (1025px+)
 │   └── AdminDashboard.css
 │
 ├── services/                # Servicios de API
-│   ├── authService.js       # NO IMPLEMENTADO (mock)
-│   └── caseService.js       # Casos y pistas (integrado con backend)
+│   └── caseService.js       # Casos, pistas y autenticación (integrado con backend)
 │
 ├── context/                 # Context API
 │   └── AuthContext.js       # Estado global de autenticación
@@ -702,29 +701,24 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/v1';
 
 ### Servicios Implementados
 
-#### ❌ `authService.js` (NO IMPLEMENTADO)
-Servicio de autenticación **mockeado**. Usa datos locales en lugar de llamadas reales al backend.
+#### ✅ `caseService.js` (COMPLETAMENTE IMPLEMENTADO)
+Servicio completamente funcional integrado con el backend. **Incluye autenticación, casos y pistas**.
 
-**Estado actual:**
-- Login simulado con datos del `AuthContext`
-- Registro no funcional
-- Logout solo limpia localStorage
+**Funciones de Autenticación:**
+- `registerUser(userData)` - Registrar nuevo usuario (POST /auth/register)
+- `authenticateUser(correo, password)` - Iniciar sesión (POST /auth/login)
+- `logoutUser()` - Cerrar sesión (limpia localStorage)
+- `getCurrentUser()` - Obtener usuario actual desde localStorage
 
-**Pendiente de implementar:**
-- Integración real con `/api/v1/auth/register`
-- Integración real con `/api/v1/auth/login`
-- Manejo de tokens JWT
-
-#### ✅ `caseService.js` (IMPLEMENTADO)
-Servicio completamente funcional integrado con el backend.
-
-**Funciones implementadas:**
+**Funciones de Casos:**
 - `getCases()` - Listar casos activos (GET /cases)
 - `getCaseById(id)` - Obtener caso específico (GET /cases/:id)
 - `createCase(data)` - Crear nuevo caso (POST /cases)
 - `updateCase(id, data)` - Actualizar caso (PUT /cases/:id)
 - `deleteCase(id)` - Eliminar caso (DELETE /cases/:id)
 - `getMyCases()` - Casos del usuario actual (GET /cases/user/me)
+
+**Funciones de Pistas:**
 - `getClues(caseId)` - Pistas de un caso (GET /clues/case/:caseId)
 - `createClue(data)` - Crear pista (POST /clues)
 - `updateClue(id, data)` - Actualizar pista (PUT /clues/:id)
@@ -804,13 +798,12 @@ El backend de este proyecto está disponible en:
 - Sistema de diseño coral implementado
 
 ### Pendiente ❌
-- **authService.js**: Actualmente mockeado, necesita integración real con backend
 - **Tests unitarios**: 0% de cobertura
 - **Tests de integración**: No implementados
 - **Tests E2E**: No implementados
 - **CI/CD**: No configurado
 - **Docker**: No dockerizado
-- **Documentación técnica completa**: Pendiente
+- **Documentación técnica completa**: Pendiente C4 y 4+1
 
 ---
 
