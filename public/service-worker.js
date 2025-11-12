@@ -1,51 +1,54 @@
 // Service Worker para Red Esperanza PWA
 const CACHE_NAME = 'red-esperanza-v1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/static/css/main.css',
-  '/static/js/main.js',
-  '/manifest.json'
-];
 
 // Instalar Service Worker
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Cache abierto');
-        return cache.addAll(urlsToCache);
-      })
-  );
+  console.log('Service Worker instalado');
+  self.skipWaiting();
 });
 
 // Activar Service Worker
 self.addEventListener('activate', (event) => {
+  console.log('Service Worker activado');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Eliminando cache antiguo:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
-    })
+    }).then(() => clients.claim())
   );
 });
 
-// Interceptar requests
+// Interceptar requests - solo red, sin cache
 self.addEventListener('fetch', (event) => {
+  // Solo cachear GET requests de la misma origin
+  if (event.request.method !== 'GET' || 
+      !event.request.url.startsWith(self.location.origin)) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then((response) => {
-        // Cache hit - devolver respuesta
-        if (response) {
-          return response;
+        // Solo cachear respuestas exitosas de recursos estáticos
+        if (response && response.status === 200 && response.type === 'basic') {
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          }).catch(() => {
+            // Ignorar errores de cache silenciosamente
+          });
         }
-        return fetch(event.request);
-      }
-    )
+        return response;
+      })
+      .catch(() => {
+        // Si falla la red, intentar del cache
+        return caches.match(event.request);
+      })
   );
 });
