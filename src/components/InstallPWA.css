@@ -1,0 +1,119 @@
+.install-pwa-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  max-width: 90%;
+  width: 400px;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+.install-pwa-content {
+  background: linear-gradient(135deg, #E53E3E 0%, #C53030 100%);
+  color: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.install-pwa-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.install-pwa-text {
+  flex: 1;
+}
+
+.install-pwa-text strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.install-pwa-text p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.install-pwa-button {
+  background: white;
+  color: #E53E3E;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.install-pwa-button:hover {
+  transform: scale(1.05);
+}
+
+.install-pwa-button:active {
+  transform: scale(0.95);
+}
+
+.install-pwa-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.install-pwa-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 480px) {
+  .install-pwa-banner {
+    bottom: 10px;
+    max-width: 95%;
+  }
+
+  .install-pwa-content {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+  }
+
+  .install-pwa-text {
+    flex-basis: 100%;
+    margin-bottom: 8px;
+  }
+
+  .install-pwa-button {
+    flex: 1;
+  }
+}

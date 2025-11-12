@@ -97,6 +97,11 @@ const ReportCasePage = () => {
   };
 
   const handleAddressSelect = (addressData) => {
+    console.log('📥 Datos recibidos en ReportCasePage:');
+    console.log('addressData completo:', addressData);
+    console.log('Latitud recibida:', addressData.latitude);
+    console.log('Longitud recibida:', addressData.longitude);
+    
     // Actualizar dirección y coordenadas desde el geocoding
     setFormData(prev => ({
       ...prev,
@@ -104,6 +109,11 @@ const ReportCasePage = () => {
       ubicacion_latitud: addressData.latitude,
       ubicacion_longitud: addressData.longitude
     }));
+    
+    console.log('✅ FormData actualizado con coordenadas:', {
+      lat: addressData.latitude,
+      lng: addressData.longitude
+    });
     
     // Scroll suave al input de dirección para que el usuario lo vea y pueda editarlo
     setTimeout(() => {

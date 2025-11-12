@@ -35,11 +35,9 @@ const CaseDetailPage = () => {
       const caseData = await getCaseById(id);
       setCaso(caseData);
       
-      // Solo cargar pistas si es admin
-      if (isAdmin()) {
-        const cluesData = await getCluesByCaseId(id);
-        setClues(cluesData);
-      }
+      // Cargar pistas (el backend filtra según el rol del usuario)
+      const cluesData = await getCluesByCaseId(id);
+      setClues(cluesData);
     } catch (error) {
       console.error('Error al cargar caso:', error);
     } finally {
@@ -88,8 +86,7 @@ const CaseDetailPage = () => {
     setSubmittingClue(true);
     try {
       await createClue({
-        id_caso: parseInt(id),
-        id_usuario_que_aporta: currentUser.id_usuario,
+        id_caso: id,
         mensaje: clueMessage,
         url_foto_pista: null
       });
@@ -98,11 +95,9 @@ const CaseDetailPage = () => {
       setClueMessage('');
       setShowClueModal(false);
       
-      // Recargar pistas si es admin
-      if (isAdmin()) {
-        const cluesData = await getCluesByCaseId(id);
-        setClues(cluesData);
-      }
+      // Recargar pistas para ver las verificadas
+      const cluesData = await getCluesByCaseId(id);
+      setClues(cluesData);
     } catch (error) {
       console.error('Error al enviar pista:', error);
       alert('Error al enviar la información');
@@ -233,7 +228,17 @@ const CaseDetailPage = () => {
           <h3 className="card-title">Lugar y Fecha de Desaparición</h3>
           <div className="info-row">
             <span className="info-label">📍 Ubicación:</span>
-            <span className="info-value">{caso.direccion_texto}</span>
+            <span className="info-value">
+              <a 
+                href={`https://www.google.com/maps/search/?api=1&query=${caso.ubicacion_latitud},${caso.ubicacion_longitud}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="map-link"
+                title="Ver en Google Maps"
+              >
+                {caso.direccion_texto}
+              </a>
+            </span>
           </div>
           <div className="info-row">
             <span className="info-label">🕐 Fecha y Hora:</span>
@@ -266,16 +271,20 @@ const CaseDetailPage = () => {
           </div>
         )}
 
-        {/* Pistas - Solo para admin */}
-        {isAdmin() && clues.length > 0 && (
-          <div className="info-card admin-only">
-            <h3 className="card-title">🔍 Pistas Recibidas ({clues.length})</h3>
+        {/* Pistas verificadas (todos las ven) / Todas las pistas (solo admin) */}
+        {clues.length > 0 && (
+          <div className={`info-card ${isAdmin() ? 'admin-only' : ''}`}>
+            <h3 className="card-title">
+              🔍 {isAdmin() ? 'Todas las Pistas' : 'Información Verificada'} ({clues.length})
+            </h3>
             {clues.map(clue => (
               <div key={clue.id_pista} className="clue-item">
                 <div className="clue-header">
-                  <span className={`clue-status ${clue.estado_pista.toLowerCase()}`}>
-                    {clue.estado_pista}
-                  </span>
+                  {isAdmin() && (
+                    <span className={`clue-status ${clue.estado_pista.toLowerCase()}`}>
+                      {clue.estado_pista}
+                    </span>
+                  )}
                   <span className="clue-date">{formatDate(clue.fecha_creacion)}</span>
                 </div>
                 <p className="clue-message">{clue.mensaje}</p>

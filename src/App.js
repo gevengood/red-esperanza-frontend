@@ -16,6 +16,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
+import InstallPWA from './components/InstallPWA';
 import HomePage from './pages/HomePage';
 import CaseDetailPage from './pages/CaseDetailPage';
 import ReportCasePage from './pages/ReportCasePage';
@@ -97,6 +98,7 @@ const Layout = ({ children }) => {
     <>
       {children}
       <Navbar />
+      <InstallPWA />
     </>
   );
 };

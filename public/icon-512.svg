@@ -1,0 +1,17 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo degradado rojo -->
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E53E3E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C53030;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="100" fill="url(#grad2)"/>
+  
+  <!-- Corazón (esperanza) más grande -->
+  <path d="M256 400 L190 334 C140 284 110 240 110 202 C110 154 142 122 182 122 C210 122 238 138 256 162 C274 138 302 122 330 122 C370 122 402 154 402 202 C402 240 372 284 322 334 Z" fill="white" opacity="0.95"/>
+  
+  <!-- Silueta de niño protegido -->
+  <circle cx="256" cy="180" r="35" fill="white" opacity="0.8"/>
+  <path d="M256 220 L240 240 L240 280 L230 320 L230 340 L240 340 L240 300 L256 260 L272 300 L272 340 L282 340 L282 320 L272 280 L272 240 Z" fill="white" opacity="0.8"/>
+</svg>

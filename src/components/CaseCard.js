@@ -127,7 +127,22 @@ const CaseCard = ({ caso, showStatus = false }) => {
             
             <p className="case-card-detail">
               <span className="detail-icon">📍</span>
-              {caso.direccion_texto}
+              <span 
+                className="map-link-inline"
+                title="Click para ver en Google Maps"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.open(
+                    `https://www.google.com/maps/search/?api=1&query=${caso.ubicacion_latitud},${caso.ubicacion_longitud}`,
+                    '_blank',
+                    'noopener,noreferrer'
+                  );
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                {caso.direccion_texto}
+              </span>
             </p>
             
             <p className="case-card-detail">

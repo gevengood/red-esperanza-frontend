@@ -142,6 +142,19 @@ const AddressSearch = ({ onSelectAddress, initialAddress = '' }) => {
       async (position) => {
         const { latitude, longitude } = position.coords;
         
+        console.log('📍 Geolocalización obtenida del navegador:');
+        console.log('Latitud:', latitude);
+        console.log('Longitud:', longitude);
+        console.log('Precisión:', position.coords.accuracy, 'metros');
+        
+        // Advertir si la precisión es baja (más de 100 metros)
+        if (position.coords.accuracy > 100) {
+          alert(
+            `⚠️ Precisión de GPS baja (${Math.round(position.coords.accuracy)} metros).\n\n` +
+            `Por favor, ajusta el marcador en el mapa para mayor exactitud.`
+          );
+        }
+        
         try {
           // Geocodificación inversa: convertir coordenadas a dirección
           const response = await fetch(
@@ -166,6 +179,11 @@ const AddressSearch = ({ onSelectAddress, initialAddress = '' }) => {
           setQuery(addressText);
           
           // Callback con la ubicación
+          console.log('📤 Enviando datos al formulario:');
+          console.log('Dirección:', addressText);
+          console.log('Latitud:', latitude);
+          console.log('Longitud:', longitude);
+          
           onSelectAddress({
             address: addressText,
             latitude: latitude,
