@@ -91,8 +91,9 @@ El resto de la UI no conoce formato de respuesta bruto del backend; recibe estru
 - Accesibilidad parcial (no ARIA completo ni navegación con teclado en todos los componentes).
 
 ## 👥 Créditos y Roles
-Autor: Jorge Steven Doncel Bejarano – Arquitectura frontend, implementación inicial, integración con backend, documentación académica.
-
+Autores: Jorge Steven Doncel Bejarano – Arquitectura frontend, implementación inicial, integración con backend, documentación académica.
+         David Santiago Buendia Londoño – Arquitectura frontend, implementación inicial, integración con backend, documentación académica.
+         Santiago Pulido Herrera – Arquitectura frontend, implementación inicial, integración con backend, documentación académica.
 Contacto: jorjuchod@gmail.com | GitHub: @gevengood
 
 © 2025 Red Esperanza – Uso académico.
