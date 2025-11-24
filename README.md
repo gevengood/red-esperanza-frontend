@@ -8,10 +8,8 @@ Beneficiarios principales:
 - Ciudadanos: canal confiable para aportar pistas con contexto geográfico y fotográfico.
 - Administradores: herramientas para moderar, aprobar, resolver o rechazar casos y pistas.
 
-## 🎨 Creatividad en la Presentación
-Formato dual (lista + mapa) para exploración espacial y textual; formulario multi‑paso claro que reduce errores; subida validada de imágenes; uso de componentes limpios y diseño coral mobile‑first.
-
-Enlace creativo (pendiente de subir): _[Video / Storytelling del flujo de reporte y aporte de pista]_
+## 🎨 Presentación
+https://vimeo.com/1138369746?share=copy&fl=sv&fe=ci
 
 ## 🧱 Fundamentos de Ingeniería de Software
 Atributos priorizados:
