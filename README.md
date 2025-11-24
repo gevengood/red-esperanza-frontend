@@ -1,4 +1,4 @@
-# Proyecto de Diseño de Software – Corte Uno: Red Esperanza (Frontend)
+# Proyecto de Diseño de Software – Corte Tres: Red Esperanza (Frontend)
 
 ## 🧠 Presentación del Problema
 La desaparición de menores exige reacción temprana y coordinación comunitaria. El frontend de Red Esperanza ofrece una interfaz para: reportar un caso (flujo guiado), visualizar casos en mapa y lista, y aportar pistas verificables que ayuden a localizar al menor. Reduce dispersión de información y acelera difusión estructurada.
